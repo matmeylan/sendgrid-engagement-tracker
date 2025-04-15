@@ -7,12 +7,14 @@
     "jsr:@std/assert@1": "1.0.12",
     "jsr:@std/bytes@1": "1.0.5",
     "jsr:@std/crypto@1": "1.0.4",
+    "jsr:@std/csv@^1.0.5": "1.0.5",
     "jsr:@std/encoding@1": "1.0.9",
     "jsr:@std/encoding@^1.0.9": "1.0.9",
     "jsr:@std/http@1": "1.0.14",
     "jsr:@std/internal@^1.0.6": "1.0.6",
     "jsr:@std/media-types@1": "1.1.0",
     "jsr:@std/path@1": "1.0.8",
+    "jsr:@std/streams@^1.0.8": "1.0.9",
     "npm:miniflare@3.20240524.1": "3.20240524.1",
     "npm:path-to-regexp@^6.3.0": "6.3.0",
     "npm:zod@^4.0.0-beta.20250414T061543": "4.0.0-beta.20250414T061543"
@@ -53,6 +55,12 @@
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
     },
+    "@std/csv@1.0.5": {
+      "integrity": "02006ffd77e84b2bf01968d4e792f0b5cba057c73dc6a89accb96d803493675f",
+      "dependencies": [
+        "jsr:@std/streams"
+      ]
+    },
     "@std/encoding@1.0.9": {
       "integrity": "025b8f18eb1749bc30d1353bf48b77d1eb5e35610220fa226f5a046b9240c5d7"
     },
@@ -70,6 +78,9 @@
     },
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
+    },
+    "@std/streams@1.0.9": {
+      "integrity": "a9d26b1988cdd7aa7b1f4b51e1c36c1557f3f252880fa6cc5b9f37078b1a5035"
     }
   },
   "npm": {
@@ -246,6 +257,7 @@
     "dependencies": [
       "jsr:@oak/oak@^17.1.4",
       "jsr:@std/assert@1",
+      "jsr:@std/csv@^1.0.5",
       "npm:zod@^4.0.0-beta.20250414T061543"
     ]
   }

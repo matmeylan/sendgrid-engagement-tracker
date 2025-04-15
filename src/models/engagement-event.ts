@@ -1,7 +1,7 @@
 import { DatabaseSync, SupportedValueType } from "node:sqlite";
 import { database } from "./core/database.ts";
 
-export interface EngagementEvent {
+export type EngagementEvent = {
   id: string;
   email: string;
   timestamp: number;
@@ -17,7 +17,7 @@ export interface EngagementEvent {
   mc_auto_name: string | null;
   useragent: string;
   ip: string;
-}
+};
 
 export function createEngagementEventsTable(db: DatabaseSync) {
   db.exec(

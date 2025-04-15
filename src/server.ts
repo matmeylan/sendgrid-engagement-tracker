@@ -1,7 +1,7 @@
 import { Application, Context, Next, Router } from "@oak/oak";
 import * as webhook from "./routes/webhook.ts";
+import * as events from "./routes/events.ts";
 import * as z from "zod";
-import { getEngagementEvents } from "./models/engagement-event.ts";
 import { env } from "./config/env.ts";
 
 export function setupApplication() {
@@ -16,12 +16,7 @@ export function setupApplication() {
     </html>
   `;
   });
-  router.get("/events", (ctx) => {
-    const events = getEngagementEvents({
-      mc_auto_id: ctx.request.url.searchParams.get("automationId") || undefined,
-    });
-    ctx.response.body = { events };
-  });
+  router.get("/events", events.get);
   router.post("/webhook", webhook.post);
 
   const app = new Application();
