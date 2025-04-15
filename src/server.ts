@@ -1,6 +1,8 @@
 import { Application, Context, Next, Router } from "@oak/oak";
 import * as webhook from "./routes/webhook.ts";
 import * as z from "zod";
+import { getEngagementEvents } from "./models/engagement-event.ts";
+import { env } from "./config/env.ts";
 
 export function setupApplication() {
   const router = new Router();
@@ -14,11 +16,23 @@ export function setupApplication() {
     </html>
   `;
   });
+  router.get("/events", (ctx) => {
+    const events = getEngagementEvents({
+      mc_auto_id: ctx.request.url.searchParams.get("automationId") || undefined,
+    });
+    ctx.response.body = { events };
+  });
   router.post("/webhook", webhook.post);
 
   const app = new Application();
   app.use(log);
   app.use(timing);
+  app.use(
+    basicAuthentication(
+      env("BASIC_AUTH_USERNAME"),
+      env("BASIC_AUTH_PASSWORD"),
+    ),
+  );
   app.use(error);
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -53,4 +67,31 @@ async function timing(ctx: Context, next: Next) {
   await next();
   const ms = Date.now() - start;
   ctx.response.headers.set("X-Response-Time", `${ms}ms`);
+}
+
+/**
+ * HTTP basic auth middleware
+ */
+function basicAuthentication(username?: string, password?: string) {
+  return async (ctx: Context, next: () => Promise<unknown>) => {
+    const authHeader = ctx.request.headers.get("Authorization");
+
+    if (!authHeader || !authHeader.startsWith("Basic ")) {
+      ctx.response.status = 401;
+      ctx.response.headers.set("WWW-Authenticate", 'Basic realm="Secure Area"');
+      ctx.response.body = "Authentication required";
+      return;
+    }
+
+    const encoded = authHeader.replace("Basic ", "");
+    const decoded = atob(encoded); // e.g. "user:pass"
+    const [user, pass] = decoded.split(":");
+
+    if (user === username && pass === password) {
+      await next();
+    } else {
+      ctx.response.status = 401;
+      ctx.response.body = "Invalid credentials";
+    }
+  };
 }
