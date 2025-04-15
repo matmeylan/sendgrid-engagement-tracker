@@ -60,7 +60,7 @@ export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
           <option value="">-- Any --</option>
           ${options}
         </select>
-        <button type="submit">View Events</button>
+        <button type="submit">Download Events</button>
       </form>
     </body>
     </html>

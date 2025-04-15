@@ -7,7 +7,7 @@ image: buildigo/sendgrid-engagement-tracker
 # Deploy to these servers.
 servers:
   web:
-    - seth.buildigo.ch # hetzner sendgrid-engagement-tracker-ng-1
+    - 91.99.50.238 # hetzner sendgrid-engagement-tracker-ng-1
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 # Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
