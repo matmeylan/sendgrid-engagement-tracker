@@ -2,25 +2,25 @@ import { Application, Context, Next, Router } from "@oak/oak";
 import * as webhook from "./routes/webhook.ts";
 import * as events from "./routes/events.ts";
 import * as index from "./routes/index.ts";
+import * as up from "./routes/up.ts";
 import * as z from "zod";
 import { env } from "./config/env.ts";
 
 export function setupApplication() {
   const app = new Application();
   const router = new Router();
-  router.get("/", index.get);
-  router.get("/health", (ctx) => ctx.response.body = "healthy");
-  router.get("/events", events.get);
+  const auth = basicAuthentication(
+    env("BASIC_AUTH_USERNAME"),
+    env("BASIC_AUTH_PASSWORD"),
+  );
+
+  router.get("/", auth, index.get);
+  router.get("/up", up.get);
+  router.get("/events", auth, events.get);
   router.post("/webhook", webhook.post);
 
   app.use(log);
   app.use(timing);
-  app.use(
-    basicAuthentication(
-      env("BASIC_AUTH_USERNAME"),
-      env("BASIC_AUTH_PASSWORD"),
-    ),
-  );
   app.use(error);
   app.use(router.routes());
   app.use(router.allowedMethods());

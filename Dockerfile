@@ -11,7 +11,7 @@ WORKDIR /app
 COPY --from=builder /app .
 
 HEALTHCHECK --interval=30s --timeout=3s \
-  CMD deno eval "try { await fetch('http://localhost:8000/health'); } catch { Deno.exit(1); }"
+  CMD deno eval "try { await fetch('http://localhost:8080/up'); } catch { Deno.exit(1); }"
 
 VOLUME ["/data"]
 
