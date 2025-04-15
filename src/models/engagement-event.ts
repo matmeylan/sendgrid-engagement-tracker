@@ -82,6 +82,13 @@ export function listDistinctAutomations(): {
   }[];
 }
 
+export function countEvents() {
+  const res = database.prepare(
+    "SELECT count(id) as count FROM engagement_events;",
+  ).get() as any;
+  return res.count;
+}
+
 function serialise(event: EngagementEvent): any {
   return {
     id: event.id,

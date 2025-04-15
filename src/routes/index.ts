@@ -1,8 +1,12 @@
 import { Context, RouterMiddleware } from "@oak/oak";
-import { listDistinctAutomations } from "../models/engagement-event.ts";
+import {
+  countEvents,
+  listDistinctAutomations,
+} from "../models/engagement-event.ts";
 
 export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
   const automations = listDistinctAutomations();
+  const numEvents = countEvents();
   const options = automations.map((automation) =>
     `<option value="${automation.mc_auto_id}">${automation.mc_auto_name}</option>`
   );
@@ -53,7 +57,7 @@ export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
     <body>
       <h1>Sendgrid engagement events</h1>
       <p>This page lets you choose a marketing automation and extract all engagement events that were captured for that automation. You'll be redirected to a page downloading a filtered list based on your selection.</p>
-  
+      <div style="margin-bottom: 1rem;"><strong>Current number of events: ${numEvents}</strong></div>
       <form method="GET" action="/events">
         <label for="category">Choose an automation (optional):</label>
         <select name="automationId" id="automationId">

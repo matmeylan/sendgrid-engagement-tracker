@@ -14,6 +14,7 @@ export const get: RouterMiddleware<"/events"> = async (ctx: Context) => {
     columns: [
       "timestamp",
       "email",
+      "mc_auto_name",
       "event",
       "url",
     ],
