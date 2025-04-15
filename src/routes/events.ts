@@ -1,11 +1,11 @@
-import { getEngagementEvents } from "../models/engagement-event.ts";
+import { listEngagementEvents } from "../models/engagement-event.ts";
 import { Context, RouterMiddleware } from "@oak/oak";
 import { stringify } from "@std/csv";
 
 export const get: RouterMiddleware<"/events"> = async (ctx: Context) => {
   const automationId = ctx.request.url.searchParams.get("automationId") ||
     undefined;
-  const events = getEngagementEvents({ mc_auto_id: automationId });
+  const events = listEngagementEvents({ mc_auto_id: automationId });
   const formatted = events.map((e) => ({
     ...e,
     timestamp: new Date(e.timestamp * 1000).toISOString(),

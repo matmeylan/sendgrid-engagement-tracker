@@ -1,25 +1,17 @@
 import { Application, Context, Next, Router } from "@oak/oak";
 import * as webhook from "./routes/webhook.ts";
 import * as events from "./routes/events.ts";
+import * as index from "./routes/index.ts";
 import * as z from "zod";
 import { env } from "./config/env.ts";
 
 export function setupApplication() {
+  const app = new Application();
   const router = new Router();
-  router.get("/", (ctx) => {
-    ctx.response.body = `<!DOCTYPE html>
-    <html>
-      <head><title>Hello buildigo!</title><head>
-      <body>
-        <h1>Hello buildigo!</h1>
-      </body>
-    </html>
-  `;
-  });
+  router.get("/", index.get);
   router.get("/events", events.get);
   router.post("/webhook", webhook.post);
 
-  const app = new Application();
   app.use(log);
   app.use(timing);
   app.use(

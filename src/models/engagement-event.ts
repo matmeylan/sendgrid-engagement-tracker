@@ -56,17 +56,30 @@ export function createEngagementEvents(events: EngagementEvent[]) {
   }
 }
 
-export function getEngagementEvents(
+export function listEngagementEvents(
   filterBy?: { mc_auto_id?: string },
 ): EngagementEvent[] {
   let statement = "SELECT * FROM engagement_events";
   let parameters: Record<string, SupportedValueType> = {};
+
   if (filterBy?.mc_auto_id) {
     statement = `${statement} WHERE mc_auto_id = :mc_auto_id`;
     parameters.mc_auto_id = filterBy.mc_auto_id;
   }
 
   return database.prepare(statement).all(parameters).map(deserialise);
+}
+
+export function listDistinctAutomations(): {
+  mc_auto_id: string;
+  mc_auto_name: string;
+}[] {
+  return database.prepare(
+    "SELECT distinct mc_auto_id, mc_auto_name FROM engagement_events WHERE mc_auto_id IS NOT NULL AND mc_auto_name IS NOT NULL;",
+  ).all() as {
+    mc_auto_id: string;
+    mc_auto_name: string;
+  }[];
 }
 
 function serialise(event: EngagementEvent): any {
