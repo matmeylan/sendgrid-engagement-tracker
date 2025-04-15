@@ -9,6 +9,7 @@ export function setupApplication() {
   const app = new Application();
   const router = new Router();
   router.get("/", index.get);
+  router.get("/health", (ctx) => ctx.response.body = "healthy");
   router.get("/events", events.get);
   router.post("/webhook", webhook.post);
 
