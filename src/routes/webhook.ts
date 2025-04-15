@@ -17,11 +17,11 @@ function toEngagementEvent(e: SendgridEvent): EngagementEvent {
   return {
     ...e,
     id: crypto.randomUUID(),
-    url: "url" in e ? e.url : null,
-    sg_machine_open: "sg_machine_open" in e
-      ? (e.sg_machine_open ?? null)
-      : null,
+    url: "url" in e ? e.url ?? null : null,
+    sg_machine_open: "sg_machine_open" in e ? e.sg_machine_open ?? null : null,
     marketing_campaign_id: e.marketing_campaign_id ?? null,
     marketing_campaign_name: e.marketing_campaign_name ?? null,
+    mc_auto_id: e.mc_auto_id ?? null,
+    mc_auto_name: e.mc_auto_name ?? null,
   };
 }
