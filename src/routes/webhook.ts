@@ -23,5 +23,6 @@ function toEngagementEvent(e: SendgridEvent): EngagementEvent {
     marketing_campaign_name: e.marketing_campaign_name ?? null,
     mc_auto_id: e.mc_auto_id ?? null,
     mc_auto_name: e.mc_auto_name ?? null,
+    category: e.category || [],
   };
 }

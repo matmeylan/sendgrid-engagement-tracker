@@ -12,7 +12,7 @@ export const SendgridEventSchema = z.object({
    * When this field is false, it indicates that the event was triggered by a conventional open.
    */
   sg_machine_open: z.boolean().optional(),
-  category: z.string().array(),
+  category: z.string().array().optional(),
   sg_event_id: z.string(),
   sg_message_id: z.string(),
   marketing_campaign_id: z.string().optional(),
