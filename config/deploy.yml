@@ -35,7 +35,7 @@ builder:
 
 # Use a persistent storage volume.
 volumes:
-  - "seth_data:/data"
+  - "/var/lib/seth:/data"
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
