@@ -2,8 +2,8 @@
   "tasks": {
     "dev": "deno run -A --env-file=.env --watch src/main.ts",
     "typecheck": "deno check src/main.ts",
-    "build": "bash scripts/build.sh",
-    "run": "bash scripts/run.sh"
+    "deploy": "bash ./scripts/deploy.sh",
+    "deploy:local": "bash ./scripts/deploy-locally.sh"
   },
   "imports": {
     "@oak/oak": "jsr:@oak/oak@^17.1.4",

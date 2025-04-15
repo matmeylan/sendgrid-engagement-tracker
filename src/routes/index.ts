@@ -11,7 +11,7 @@ export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
     <html lang="en">
     <head>
       <meta charset="UTF-8" />
-      <title>Welcome</title>
+      <title>Welcome !</title>
       <style>
         body {
           font-family: Arial, sans-serif;
