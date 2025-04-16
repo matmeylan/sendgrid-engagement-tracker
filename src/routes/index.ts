@@ -55,7 +55,7 @@ export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
       </style>
     </head>
     <body>
-      <h1>Sendgrid engagement events</h1>
+      <h1>Sendgrid Engagement Tracker Hub (SETH)</h1>
       <p>This page lets you choose a marketing automation and extract all engagement events that were captured for that automation. You'll be redirected to a page downloading a filtered list based on your selection.</p>
       <div style="margin-bottom: 1rem;"><strong>Current number of events: ${numEvents}</strong></div>
       <form method="GET" action="/events">
