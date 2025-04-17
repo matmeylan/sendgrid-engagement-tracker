@@ -5,7 +5,12 @@ import { stringify } from "@std/csv";
 export const get: RouterMiddleware<"/events"> = async (ctx: Context) => {
   const automationId = ctx.request.url.searchParams.get("automationId") ||
     undefined;
-  const events = listEngagementEvents({ mc_auto_id: automationId });
+  const campaignId = ctx.request.url.searchParams.get("campaignId") ||
+    undefined;
+  const events = listEngagementEvents({
+    mc_auto_id: automationId,
+    marketing_campaign_id: campaignId,
+  });
   const formatted = events.map((e) => ({
     ...e,
     timestamp: new Date(e.timestamp * 1000).toISOString(),
@@ -15,6 +20,7 @@ export const get: RouterMiddleware<"/events"> = async (ctx: Context) => {
       "timestamp",
       "email",
       "mc_auto_name",
+      "marketing_campaign_name",
       "event",
       "url",
     ],

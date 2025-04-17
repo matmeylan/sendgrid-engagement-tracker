@@ -2,13 +2,18 @@ import { Context, RouterMiddleware } from "@oak/oak";
 import {
   countEvents,
   listDistinctAutomations,
+  listDistinctMarketingCampaigns,
 } from "../models/engagement-event.ts";
 
 export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
   const automations = listDistinctAutomations();
+  const campaigns = listDistinctMarketingCampaigns();
   const numEvents = countEvents();
-  const options = automations.map((automation) =>
+  const automationOptions = automations.map((automation) =>
     `<option value="${automation.mc_auto_id}">${automation.mc_auto_name}</option>`
+  );
+  const campaignOptions = campaigns.map((c) =>
+    `<option value="${c.marketing_campaign_id}">${c.marketing_campaign_name}</option>`
   );
   ctx.response.body = `
     <!DOCTYPE html>
@@ -59,10 +64,15 @@ export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
       <p>This page lets you choose a marketing automation and extract all engagement events that were captured for that automation. You'll be redirected to a page downloading a filtered list based on your selection.</p>
       <div style="margin-bottom: 1rem;"><strong>Current number of events: ${numEvents}</strong></div>
       <form method="GET" action="/events">
-        <label for="category">Choose an automation (optional):</label>
+        <label for="automationId">Automation (optional):</label>
         <select name="automationId" id="automationId">
           <option value="">-- Any --</option>
-          ${options}
+          ${automationOptions}
+        </select>
+        <label for="campaignId">Marketing campaign / single send (optional):</label>
+        <select name="campaignId" id="campaignId">
+          <option value="">-- Any --</option>
+          ${campaignOptions}
         </select>
         <button type="submit">Download Events</button>
       </form>

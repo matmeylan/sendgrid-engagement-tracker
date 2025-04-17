@@ -57,14 +57,22 @@ export function createEngagementEvents(events: EngagementEvent[]) {
 }
 
 export function listEngagementEvents(
-  filterBy?: { mc_auto_id?: string },
+  filterBy?: { mc_auto_id?: string; marketing_campaign_id?: string },
 ): EngagementEvent[] {
-  let statement = "SELECT * FROM engagement_events";
   let parameters: Record<string, SupportedValueType> = {};
+  let statement = "SELECT * FROM engagement_events";
 
+  const whereConditions = [];
   if (filterBy?.mc_auto_id) {
-    statement = `${statement} WHERE mc_auto_id = :mc_auto_id`;
+    whereConditions.push(`mc_auto_id = :mc_auto_id`);
     parameters.mc_auto_id = filterBy.mc_auto_id;
+  }
+  if (filterBy?.marketing_campaign_id) {
+    whereConditions.push(`marketing_campaign_id = :marketing_campaign_id`);
+    parameters.marketing_campaign_id = filterBy.marketing_campaign_id;
+  }
+  if (whereConditions.length) {
+    statement = `${statement} WHERE ${whereConditions.join(" AND ")}`;
   }
 
   return database.prepare(statement).all(parameters).map(deserialise);
@@ -79,6 +87,18 @@ export function listDistinctAutomations(): {
   ).all() as {
     mc_auto_id: string;
     mc_auto_name: string;
+  }[];
+}
+
+export function listDistinctMarketingCampaigns(): {
+  marketing_campaign_id: string;
+  marketing_campaign_name: string;
+}[] {
+  return database.prepare(
+    "SELECT distinct marketing_campaign_id, marketing_campaign_name FROM engagement_events WHERE marketing_campaign_id IS NOT NULL AND marketing_campaign_name IS NOT NULL;",
+  ).all() as {
+    marketing_campaign_id: string;
+    marketing_campaign_name: string;
   }[];
 }
 
