@@ -9,12 +9,16 @@ export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
   const automations = listDistinctAutomations();
   const singleSend = listDistinctSingleSend();
   const numEvents = countEvents();
-  const automationOptions = automations.map((automation) =>
-    `<option value="${automation.mc_auto_id}">${automation.mc_auto_name}</option>`
-  );
-  const singleSendOptions = singleSend.map((c) =>
-    `<option value="${c.singlesend_id}">${c.singlesend_name}</option>`
-  );
+  const automationOptions = automations
+    .sort((a, b) => a.mc_auto_name.localeCompare(b.mc_auto_name))
+    .map((automation) =>
+      `<option value="${automation.mc_auto_id}">${automation.mc_auto_name}</option>`
+    );
+  const singleSendOptions = singleSend
+    .sort((a, b) => a.singlesend_name.localeCompare(b.singlesend_name))
+    .map((c) =>
+      `<option value="${c.singlesend_id}">${c.singlesend_name}</option>`
+    );
   ctx.response.body = `
     <!DOCTYPE html>
     <html lang="en">
