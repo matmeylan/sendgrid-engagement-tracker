@@ -15,6 +15,8 @@ export type EngagementEvent = {
   marketing_campaign_name: string | null;
   mc_auto_id: string | null;
   mc_auto_name: string | null;
+  singlesend_id: string | null;
+  singlesend_name: string | null;
   useragent: string;
   ip: string;
 };
@@ -37,6 +39,8 @@ export function createEngagementEventsTable(db: DatabaseSync) {
             marketing_campaign_name TEXT,
             mc_auto_id              TEXT,
             mc_auto_name            TEXT,
+            singlesend_id           TEXT,
+            singlesend_name         TEXT,
             useragent               TEXT,
             ip                      TEXT
         );
@@ -47,8 +51,8 @@ export function createEngagementEventsTable(db: DatabaseSync) {
 export function createEngagementEvents(events: EngagementEvent[]) {
   const insert = database.prepare(
     `
-	  INSERT INTO engagement_events (id, email, timestamp, event, url, category, sg_machine_open, sg_event_id, sg_message_id, marketing_campaign_id, marketing_campaign_name, mc_auto_id, mc_auto_name, useragent, ip) 
-	  VALUES (:id, :email, :timestamp, :event, :url, :category, :sg_machine_open, :sg_event_id, :sg_message_id, :marketing_campaign_id, :marketing_campaign_name, :mc_auto_id, :mc_auto_name, :useragent, :ip);
+	  INSERT INTO engagement_events (id, email, timestamp, event, url, category, sg_machine_open, sg_event_id, sg_message_id, marketing_campaign_id, marketing_campaign_name, mc_auto_id, mc_auto_name, singlesend_id, singlesend_name, useragent, ip) 
+	  VALUES (:id, :email, :timestamp, :event, :url, :category, :sg_machine_open, :sg_event_id, :sg_message_id, :marketing_campaign_id, :marketing_campaign_name, :mc_auto_id, :mc_auto_name, :singlesend_id, :singlesend_name, :useragent, :ip);
   `,
   );
   for (const event of events) {
@@ -57,9 +61,9 @@ export function createEngagementEvents(events: EngagementEvent[]) {
 }
 
 export function listEngagementEvents(
-  filterBy?: { mc_auto_id?: string; marketing_campaign_id?: string },
+  filterBy?: { mc_auto_id?: string; singlesend_id?: string },
 ): EngagementEvent[] {
-  let parameters: Record<string, SupportedValueType> = {};
+  const parameters: Record<string, SupportedValueType> = {};
   let statement = "SELECT * FROM engagement_events";
 
   const whereConditions = [];
@@ -67,9 +71,9 @@ export function listEngagementEvents(
     whereConditions.push(`mc_auto_id = :mc_auto_id`);
     parameters.mc_auto_id = filterBy.mc_auto_id;
   }
-  if (filterBy?.marketing_campaign_id) {
-    whereConditions.push(`marketing_campaign_id = :marketing_campaign_id`);
-    parameters.marketing_campaign_id = filterBy.marketing_campaign_id;
+  if (filterBy?.singlesend_id) {
+    whereConditions.push(`singlesend_id = :singlesend_id`);
+    parameters.singlesend_id = filterBy.singlesend_id;
   }
   if (whereConditions.length) {
     statement = `${statement} WHERE ${whereConditions.join(" AND ")}`;
@@ -90,15 +94,15 @@ export function listDistinctAutomations(): {
   }[];
 }
 
-export function listDistinctMarketingCampaigns(): {
-  marketing_campaign_id: string;
-  marketing_campaign_name: string;
+export function listDistinctSingleSend(): {
+  singlesend_id: string;
+  singlesend_name: string;
 }[] {
   return database.prepare(
-    "SELECT distinct marketing_campaign_id, marketing_campaign_name FROM engagement_events WHERE marketing_campaign_id IS NOT NULL AND marketing_campaign_name IS NOT NULL;",
+    "SELECT distinct singlesend_id, singlesend_name FROM engagement_events WHERE singlesend_id IS NOT NULL AND singlesend_name IS NOT NULL;",
   ).all() as {
-    marketing_campaign_id: string;
-    marketing_campaign_name: string;
+    singlesend_id: string;
+    singlesend_name: string;
   }[];
 }
 
@@ -124,6 +128,8 @@ function serialise(event: EngagementEvent): any {
     marketing_campaign_name: event.marketing_campaign_name,
     mc_auto_id: event.mc_auto_id,
     mc_auto_name: event.mc_auto_name,
+    singlesend_id: event.singlesend_id,
+    singlesend_name: event.singlesend_name,
     useragent: event.useragent,
     ip: event.ip,
   };

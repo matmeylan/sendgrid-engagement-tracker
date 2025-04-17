@@ -2,18 +2,18 @@ import { Context, RouterMiddleware } from "@oak/oak";
 import {
   countEvents,
   listDistinctAutomations,
-  listDistinctMarketingCampaigns,
+  listDistinctSingleSend,
 } from "../models/engagement-event.ts";
 
 export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
   const automations = listDistinctAutomations();
-  const campaigns = listDistinctMarketingCampaigns();
+  const singleSend = listDistinctSingleSend();
   const numEvents = countEvents();
   const automationOptions = automations.map((automation) =>
     `<option value="${automation.mc_auto_id}">${automation.mc_auto_name}</option>`
   );
-  const campaignOptions = campaigns.map((c) =>
-    `<option value="${c.marketing_campaign_id}">${c.marketing_campaign_name}</option>`
+  const singleSendOptions = singleSend.map((c) =>
+    `<option value="${c.singlesend_id}">${c.singlesend_name}</option>`
   );
   ctx.response.body = `
     <!DOCTYPE html>
@@ -69,10 +69,10 @@ export const get: RouterMiddleware<"/"> = async (ctx: Context) => {
           <option value="">-- Any --</option>
           ${automationOptions}
         </select>
-        <label for="campaignId">Marketing campaign / single send (optional):</label>
-        <select name="campaignId" id="campaignId">
+        <label for="singleSendId">Single send (optional):</label>
+        <select name="singleSendId" id="singleSendId">
           <option value="">-- Any --</option>
-          ${campaignOptions}
+          ${singleSendOptions}
         </select>
         <button type="submit">Download Events</button>
       </form>

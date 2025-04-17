@@ -17,6 +17,8 @@ export const SendgridEventSchema = z.object({
   sg_message_id: z.string(),
   marketing_campaign_id: z.string().optional(),
   marketing_campaign_name: z.string().optional(),
+  singlesend_id: z.string().optional(),
+  singlesend_name: z.string().optional(),
   mc_auto_id: z.string().optional(),
   mc_auto_name: z.string().optional(),
   useragent: z.string(),
