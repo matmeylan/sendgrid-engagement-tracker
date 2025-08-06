@@ -29,4 +29,4 @@ Builds a docker image and run it locally, this is the closest to what a deployme
 
 ```deno task deploy```
 
-Uses [kamal](https://kamal-deploy.org/) to deploy to a VM hosted in hetzner. It's wired to [seth.buildigo.ch](https://seth.buildigo.ch). To run it yourself, you need to have SSH access to the VM and 1password access with the 1Password CLI.
+Uses [kamal](https://kamal-deploy.org/) to deploy.

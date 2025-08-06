@@ -1,3 +1,2 @@
 - backups
-- tailwind
-- sendgrid signature
+- check sendgrid signature
